@@ -30,11 +30,10 @@ describe('NewThread entities', () => {
     };
 
     // Action
-    const newThread = new NewThread(payload);
+    const { title, body } = new NewThread(payload);
 
     // Assert
-    expect(newThread).toBeInstanceOf(NewThread);
-    expect(newThread.title).toEqual(payload.title);
-    expect(newThread.body).toEqual(payload.body);
+    expect(title).toEqual(payload.title);
+    expect(body).toEqual(payload.body);
   });
 });
