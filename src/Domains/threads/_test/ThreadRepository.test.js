@@ -12,7 +12,7 @@ describe('ThreadRepository', () => {
     await expect(threaRepository.getTheThreadById('')).rejects.toThrow(
       'THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED',
     );
-    await expect(threaRepository.verifyTheThread('')).rejects.toThrow(
+    await expect(threaRepository.verifyAvailableThread('')).rejects.toThrow(
       'THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED',
     );
   });

@@ -29,6 +29,7 @@ const container = createContainer();
 
 // registering services and repository
 container.register([
+  // domain layer
   {
     key: UserRepository.name,
     Class: UserRepositoryPostgres,
@@ -54,6 +55,7 @@ container.register([
       ],
     },
   },
+  // application layer
   {
     key: PasswordHash.name,
     Class: BcryptPasswordHash,
