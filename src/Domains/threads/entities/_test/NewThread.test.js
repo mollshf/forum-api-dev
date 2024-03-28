@@ -16,6 +16,7 @@ describe('NewThread entities', () => {
     const payload = {
       title: 123,
       body: true,
+      owner: 111,
     };
 
     // Action & Assert
@@ -27,13 +28,15 @@ describe('NewThread entities', () => {
     const payload = {
       title: 'Manfaat Madu',
       body: 'Madu obat mujarab cuii',
+      owner: 'user-23908e',
     };
 
     // Action
-    const { title, body } = new NewThread(payload);
+    const { title, body, owner } = new NewThread(payload);
 
     // Assert
     expect(title).toEqual(payload.title);
     expect(body).toEqual(payload.body);
+    expect(owner).toEqual(payload.owner);
   });
 });

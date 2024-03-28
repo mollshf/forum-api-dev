@@ -23,6 +23,8 @@ const AuthenticationRepository = require('../Domains/authentications/Authenticat
 const AuthenticationRepositoryPostgres = require('./repository/AuthenticationRepositoryPostgres');
 const LogoutUserUseCase = require('../Applications/use_case/LogoutUserUseCase');
 const RefreshAuthenticationUseCase = require('../Applications/use_case/RefreshAuthenticationUseCase');
+const ThreadRepository = require('../Domains/threads/ThreadRepository');
+const ThreadRepositoryPostgres = require('./repository/ThreadRepositoryPostgres');
 
 // creating container
 const container = createContainer();
@@ -30,6 +32,7 @@ const container = createContainer();
 // registering services and repository
 container.register([
   // domain layer
+  // User Repository
   {
     key: UserRepository.name,
     Class: UserRepositoryPostgres,
@@ -44,6 +47,7 @@ container.register([
       ],
     },
   },
+  // Authentication Repository
   {
     key: AuthenticationRepository.name,
     Class: AuthenticationRepositoryPostgres,
@@ -51,6 +55,21 @@ container.register([
       dependencies: [
         {
           concrete: pool,
+        },
+      ],
+    },
+  },
+  // Thread Repository
+  {
+    key: ThreadRepository.name,
+    Class: ThreadRepositoryPostgres,
+    parameter: {
+      dependencies: [
+        {
+          concrete: pool,
+        },
+        {
+          concrete: nanoid,
         },
       ],
     },
