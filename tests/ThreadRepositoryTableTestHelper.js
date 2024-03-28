@@ -1,16 +1,19 @@
 /* istanbul ignore file */
-const { nanoid } = require('nanoid');
+
 const pool = require('../src/Infrastructures/database/postgres/pool');
 
 const ThreadsTableTestHelper = {
-  async addThread(payload) {
-    const { title, body, owner } = payload;
-    const id = `thread-${nanoid(16)}`;
-    const date = new Date().toISOString();
-
+  async addThread({
+    id = 'user-123',
+    title = 'absurd',
+    body = 'sage is duelist not healer',
+    owner = 'user-forsaken',
+    date = '2024',
+    comment = [],
+  }) {
     const query = {
       text: 'INSERT INTO threads VALUES($1, $2, $3, $4, $5, $6)',
-      values: [id, title, body, date, owner],
+      values: [id, title, body, date, owner, comment],
     };
 
     await pool.query(query);

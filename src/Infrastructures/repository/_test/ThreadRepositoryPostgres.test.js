@@ -1,7 +1,10 @@
 const ThreadsTableTestHelper = require('../../../../tests/ThreadRepositoryTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
+const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const AddedThread = require('../../../Domains/threads/entities/AddedThread');
+const MainThread = require('../../../Domains/threads/entities/MainThread');
 const NewThread = require('../../../Domains/threads/entities/NewThread');
+const RegisterUser = require('../../../Domains/users/entities/RegisterUser');
 const pool = require('../../database/postgres/pool');
 const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres');
 
@@ -20,7 +23,7 @@ describe('ThreadRepository postgres', () => {
       // Arrange
 
       /** create user */
-      await UsersTableTestHelper.addUser({ id: 'user-001', username: 'kcy1' });
+      await UsersTableTestHelper.addUser({ id: 'user-001', username: 'suba' });
 
       const newThread = new NewThread({
         title: 'this is title',
@@ -46,8 +49,9 @@ describe('ThreadRepository postgres', () => {
       // Arrange
 
       /** create user */
-      await UsersTableTestHelper.addUser({ id: 'user-002', username: 'kcy1' });
-
+      await UsersTableTestHelper.addUser({ id: 'user-002', username: 'omo' });
+      const data = await UsersTableTestHelper.getAllUsers();
+      console.log(data);
       const newThread = new NewThread({
         title: 'this is title',
         body: 'this is body',
@@ -74,8 +78,41 @@ describe('ThreadRepository postgres', () => {
   });
 
   describe('getThreadById function', () => {
-    it('should throw notfounderror when thread not found', async () => {});
+    it('should throw notfounderror when thread not found', async () => {
+      // Arrange
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
-    it('should return the thread correctly', async () => {});
+      // Action & Assert
+      await expect(threadRepositoryPostgres.getTheThreadById('thread-nothread')).rejects.toThrow(
+        NotFoundError,
+      );
+    });
+
+    it('should return the thread correctly', async () => {
+      // Arrange
+
+      await UsersTableTestHelper.addUser({
+        id: 'user-forsaken',
+        username: 'jett',
+      });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-yoo', title: 'makan' });
+
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      const thread = await threadRepositoryPostgres.getTheThreadById('thread-yoo');
+      console.log(thread);
+
+      expect(thread).toEqual(
+        new MainThread({
+          id: 'thread-yoo',
+          title: 'makan',
+          body: 'sage is duelist not healer',
+          date: '2024',
+          username: 'jett',
+          comments: [],
+        }),
+      );
+    });
   });
 });
