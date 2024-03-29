@@ -41,7 +41,6 @@ describe('ThreadRepository postgres', () => {
 
       // Assert
       const thread = await ThreadsTableTestHelper.findThreadById('thread-yoyo');
-      console.log(thread);
       expect(thread).toHaveLength(1);
     });
 
@@ -50,8 +49,7 @@ describe('ThreadRepository postgres', () => {
 
       /** create user */
       await UsersTableTestHelper.addUser({ id: 'user-002', username: 'omo' });
-      const data = await UsersTableTestHelper.getAllUsers();
-      console.log(data);
+
       const newThread = new NewThread({
         title: 'this is title',
         body: 'this is body',
@@ -101,7 +99,6 @@ describe('ThreadRepository postgres', () => {
 
       // Action & Assert
       const thread = await threadRepositoryPostgres.getTheThreadById('thread-yoo');
-      console.log(thread);
 
       expect(thread).toEqual(
         new MainThread({
