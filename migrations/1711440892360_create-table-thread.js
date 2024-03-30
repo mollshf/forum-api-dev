@@ -20,7 +20,7 @@ exports.up = (pgm) => {
       type: 'TEXT',
       notNull: true,
     },
-    comment: {
+    comments: {
       type: 'TEXT[]',
       defaultValue: [],
     },

@@ -9,8 +9,8 @@ const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres');
 
 describe('ThreadRepository postgres', () => {
   afterEach(async () => {
-    ThreadsTableTestHelper.cleanTable();
     UsersTableTestHelper.cleanTable();
+    ThreadsTableTestHelper.cleanTable();
   });
 
   afterAll(async () => {
