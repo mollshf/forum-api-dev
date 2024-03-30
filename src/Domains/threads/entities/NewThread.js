@@ -1,5 +1,13 @@
 class NewThread {
   constructor(payload) {
+    this._verifyPayload(payload);
+
+    this.title = payload.title;
+    this.body = payload.body;
+    this.owner = payload.owner;
+  }
+
+  _verifyPayload(payload) {
     const { title, body, owner } = payload;
 
     if (!title || !body || !owner) {
@@ -9,10 +17,6 @@ class NewThread {
     if (typeof title !== 'string' || typeof body !== 'string' || typeof owner !== 'string') {
       throw new Error('NEW_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
-
-    this.title = title;
-    this.body = body;
-    this.owner = owner;
   }
 }
 

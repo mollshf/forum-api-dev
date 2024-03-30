@@ -1,7 +1,14 @@
 class AddedThread {
   constructor(payload) {
-    const { id, title, owner } = payload;
+    this._verifyPayload(payload);
 
+    this.id = payload.id;
+    this.title = payload.title;
+    this.owner = payload.owner;
+  }
+
+  _verifyPayload(payload) {
+    const { id, title, owner } = payload;
     if (!id || !title || !owner) {
       throw new Error('ADDED_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
     }
@@ -9,10 +16,6 @@ class AddedThread {
     if (typeof id !== 'string' || typeof title !== 'string' || typeof owner !== 'string') {
       throw new Error('ADDED_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
-
-    this.id = id;
-    this.title = title;
-    this.owner = owner;
   }
 }
 

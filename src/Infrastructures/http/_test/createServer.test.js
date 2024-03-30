@@ -1,4 +1,5 @@
 const createServer = require('../createServer');
+const jwt = require('@hapi/jwt');
 
 describe('HTTP server', () => {
   it('should response 404 when request unregistered route', async () => {

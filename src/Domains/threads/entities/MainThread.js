@@ -1,5 +1,16 @@
 class MainThread {
   constructor(payload) {
+    this._verifyPayload(payload);
+
+    this.id = payload.id;
+    this.title = payload.title;
+    this.body = payload.body;
+    this.date = payload.date;
+    this.username = payload.username;
+    this.comments = payload.comments;
+  }
+
+  _verifyPayload(payload) {
     const { id, title, body, date, username, comments } = payload;
 
     if (!id || !title || !body || !date || !username || !comments) {
@@ -16,13 +27,6 @@ class MainThread {
     ) {
       throw new Error('MAIN_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
-
-    this.id = id;
-    this.title = title;
-    this.body = body;
-    this.date = date;
-    this.username = username;
-    this.comments = comments;
   }
 }
 

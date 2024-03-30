@@ -4,7 +4,6 @@ const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const AddedThread = require('../../../Domains/threads/entities/AddedThread');
 const MainThread = require('../../../Domains/threads/entities/MainThread');
 const NewThread = require('../../../Domains/threads/entities/NewThread');
-const RegisterUser = require('../../../Domains/users/entities/RegisterUser');
 const pool = require('../../database/postgres/pool');
 const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres');
 
