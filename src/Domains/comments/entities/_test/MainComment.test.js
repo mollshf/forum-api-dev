@@ -1,4 +1,4 @@
-const MainComment = require('../entities/MainComment');
+const MainComment = require('../MainComment');
 
 describe('MainComment entities', () => {
   it('should throw error when payload did not contain needed property', () => {

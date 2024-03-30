@@ -1,4 +1,4 @@
-const NewComment = require('../entities/NewComment');
+const NewComment = require('../NewComment');
 
 describe('NewComment entities', () => {
   it('should throw error when payload did not contain needed property', () => {

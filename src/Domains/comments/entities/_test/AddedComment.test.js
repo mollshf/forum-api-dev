@@ -1,4 +1,4 @@
-const AddedComment = require('../entities/AddedComment');
+const AddedComment = require('../AddedComment');
 
 describe('AddedComment entities', () => {
   it('should throw error when payload did not contain needed property', () => {
