@@ -72,6 +72,9 @@ container.register([
         {
           concrete: nanoid,
         },
+        {
+          concrete: new Date().toISOString(),
+        },
       ],
     },
   },

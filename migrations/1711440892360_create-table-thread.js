@@ -20,10 +20,6 @@ exports.up = (pgm) => {
       type: 'TEXT',
       notNull: true,
     },
-    comments: {
-      type: 'TEXT[]',
-      defaultValue: [],
-    },
   });
 
   pgm.addConstraint(

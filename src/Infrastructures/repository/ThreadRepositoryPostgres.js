@@ -3,22 +3,21 @@ const ThreadRepository = require('../../Domains/threads/ThreadRepository');
 const AddedThread = require('../../Domains/threads/entities/AddedThread');
 
 class ThreadRepositoryPostgres extends ThreadRepository {
-  constructor(pool, idGenerator) {
+  constructor(pool, idGenerator, dateGenerator) {
     super();
     this._pool = pool;
     this._idGenerator = idGenerator;
-    this._dateGenerator = new Date();
+    this._dateGenerator = dateGenerator;
   }
 
   async addThread(payload) {
     const { title, body, owner } = payload;
     const id = `thread-${this._idGenerator(16)}`;
-    const date = this._dateGenerator.toISOString();
-    const comment = [];
+    const date = this._dateGenerator;
 
     const query = {
-      text: 'INSERT INTO threads VALUES($1, $2, $3, $4, $5, $6) RETURNING id, title, owner ',
-      values: [id, title, body, date, owner, comment],
+      text: 'INSERT INTO threads VALUES($1, $2, $3, $4, $5) RETURNING id, title, owner ',
+      values: [id, title, body, date, owner],
     };
 
     const result = await this._pool.query(query);
@@ -27,7 +26,7 @@ class ThreadRepositoryPostgres extends ThreadRepository {
 
   async getTheThreadById(id) {
     const query = {
-      text: `SELECT threads.id, threads.title, threads.body, threads.date, users.username AS username, threads.comments
+      text: `SELECT threads.id, threads.title, threads.body, threads.date, users.username AS username
       FROM threads
       JOIN users ON threads.owner = users.id
       WHERE threads.id = $1`,

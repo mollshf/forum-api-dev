@@ -18,7 +18,7 @@ describe('ThreadRepository postgres', () => {
   });
 
   describe('addThread function', () => {
-    it('should add thread to database', async () => {
+    it('should add thread to database and return correctly', async () => {
       // Arrange
 
       /** create user */
@@ -32,43 +32,25 @@ describe('ThreadRepository postgres', () => {
 
       /** stub */
       const fakeIdGenerator = () => 'yoyo';
+      const fakeDateGenerator = () => '2024';
 
-      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator);
-
-      // Action
-      await threadRepositoryPostgres.addThread(newThread);
-
-      // Assert
-      const thread = await ThreadsTableTestHelper.findThreadById('thread-yoyo');
-      expect(thread).toHaveLength(1);
-    });
-
-    it('should return added thread correctly', async () => {
-      // Arrange
-
-      /** create user */
-      await UsersTableTestHelper.addUser({ id: 'user-002', username: 'omo' });
-
-      const newThread = new NewThread({
-        title: 'this is title',
-        body: 'this is body',
-        owner: 'user-002',
-      });
-
-      /** stub */
-      const fakeIdGenerator = () => 'yoyo';
-
-      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator);
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(
+        pool,
+        fakeIdGenerator,
+        fakeDateGenerator,
+      );
 
       // Action
       const addedThread = await threadRepositoryPostgres.addThread(newThread);
 
       // Assert
+      const getThread = await ThreadsTableTestHelper.findThreadById('thread-yoyo');
+      expect(getThread).toHaveLength(1);
       expect(addedThread).toStrictEqual(
         new AddedThread({
           id: 'thread-yoyo',
           title: 'this is title',
-          owner: 'user-002',
+          owner: 'user-001',
         }),
       );
     });
@@ -77,38 +59,54 @@ describe('ThreadRepository postgres', () => {
   describe('getThreadById function', () => {
     it('should throw notfounderror when thread not found', async () => {
       // Arrange
+
+      /* user test helper */
+      await UsersTableTestHelper.addUser({ id: 'user-nfe1' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-nfet1', owner: 'user-nfe1' });
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
       // Action & Assert
-      await expect(threadRepositoryPostgres.getTheThreadById('thread-nothread')).rejects.toThrow(
+      await expect(threadRepositoryPostgres.getTheThreadById('thread-xyz')).rejects.toThrow(
         NotFoundError,
       );
     });
 
-    it('should return the thread correctly', async () => {
+    it('should return the thread correctly when thread found', async () => {
       // Arrange
 
+      const newThread = {
+        id: 'thread-929',
+        title: 'valorant',
+        body: 'minnasan',
+        owner: 'user-forsaken',
+        date: '2024',
+      };
+
+      const expectedGetThread = {
+        id: 'thread-929',
+        title: 'valorant',
+        body: 'minnasan',
+        username: 'jett',
+        date: '2024',
+      };
+
+      /* user test helper */
       await UsersTableTestHelper.addUser({
         id: 'user-forsaken',
-        username: 'jett',
+        username: expectedGetThread.username,
       });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-yoo', title: 'makan' });
+      await ThreadsTableTestHelper.addThread(newThread);
 
+      /* instantiate */
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
-      // Action & Assert
-      const thread = await threadRepositoryPostgres.getTheThreadById('thread-yoo');
+      // Action
+      const thread = await threadRepositoryPostgres.getTheThreadById('thread-929');
 
-      expect(thread).toEqual(
-        new MainThread({
-          id: 'thread-yoo',
-          title: 'makan',
-          body: 'sage is duelist not healer',
-          date: '2024',
-          username: 'jett',
-          comments: [],
-        }),
-      );
+      // Assert
+      expect(thread).toStrictEqual(expectedGetThread);
+
+      expect(thread);
     });
   });
 });

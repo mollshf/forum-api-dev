@@ -38,7 +38,7 @@ describe('MainThread entities', () => {
       body: 'anti bakter, anti infeksi',
       date: `${+new Date()}`,
       username: 'user-omoshiroi12',
-      comments: [{}],
+      comments: [],
     };
 
     // Action

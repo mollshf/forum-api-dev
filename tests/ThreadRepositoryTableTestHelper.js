@@ -7,13 +7,12 @@ const ThreadsTableTestHelper = {
     id = 'user-123',
     title = 'absurd',
     body = 'sage is duelist not healer',
-    owner = 'user-forsaken',
     date = '2024',
-    comment = [],
+    owner = 'user-forsaken',
   }) {
     const query = {
-      text: 'INSERT INTO threads VALUES($1, $2, $3, $4, $5, $6)',
-      values: [id, title, body, date, owner, comment],
+      text: 'INSERT INTO threads VALUES($1, $2, $3, $4, $5)',
+      values: [id, title, body, date, owner],
     };
 
     await pool.query(query);
