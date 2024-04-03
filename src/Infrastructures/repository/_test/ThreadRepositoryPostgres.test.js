@@ -105,8 +105,6 @@ describe('ThreadRepository postgres', () => {
 
       // Assert
       expect(thread).toStrictEqual(expectedGetThread);
-
-      expect(thread);
     });
   });
 });

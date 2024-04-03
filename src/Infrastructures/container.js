@@ -26,13 +26,15 @@ const RefreshAuthenticationUseCase = require('../Applications/use_case/RefreshAu
 const ThreadRepository = require('../Domains/threads/ThreadRepository');
 const ThreadRepositoryPostgres = require('./repository/ThreadRepositoryPostgres');
 const AddThreadUseCase = require('../Applications/use_case/AddThreadUseCase');
+const GetThreadUseCase = require('../Applications/use_case/GetThreadUseCase');
+const CommentRepository = require('../Domains/comments/CommentRepository');
 
 // creating container
 const container = createContainer();
 
 // registering services and repository
+// domain layer
 container.register([
-  // domain layer
   // User Repository
   {
     key: UserRepository.name,
@@ -90,6 +92,18 @@ container.register([
       ],
     },
   },
+  // Comment Layer
+  // {
+  //   key: CommentRepository.name,
+  //   Class: CommentRepositoryP,
+  //   parameter: {
+  //     dependencies: [
+  //       {
+  //         concrete: bcrypt,
+  //       },
+  //     ],
+  //   },
+  // },
   {
     key: AuthenticationTokenManager.name,
     Class: JwtTokenManager,
@@ -186,6 +200,24 @@ container.register([
         {
           name: 'threadRepository',
           internal: ThreadRepository.name,
+        },
+      ],
+    },
+  },
+
+  {
+    key: GetThreadUseCase.name,
+    Class: GetThreadUseCase,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'threadRepository',
+          internal: ThreadRepository.name,
+        },
+        {
+          name: 'commentRepository',
+          internal: CommentRepository.name,
         },
       ],
     },

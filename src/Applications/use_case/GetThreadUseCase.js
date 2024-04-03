@@ -1,6 +1,6 @@
 class GetThreadUseCase {
-  constructor({ threadRepositoy, commentRepository }) {
-    this._threadRepository = threadRepositoy;
+  constructor({ threadRepository, commentRepository }) {
+    this._threadRepository = threadRepository;
     this._commentRepository = commentRepository;
   }
 
@@ -8,7 +8,7 @@ class GetThreadUseCase {
     const thread = await this._threadRepository.getTheThreadById(threadId);
     const comment = await this._commentRepository.getCommentByThreadId(threadId);
 
-    thread.comments = this._changeContent(comment);
+    thread.comments = this._changeContentOfComments(comment);
 
     return thread;
   }
@@ -16,7 +16,7 @@ class GetThreadUseCase {
   _changeContentOfComments(arr) {
     return arr.map((data) => {
       if (data.isDelete) {
-        data.content = 'dihapus';
+        data.content = '**komentar telah dihapus**';
       }
       delete data.isDelete;
       return data;
