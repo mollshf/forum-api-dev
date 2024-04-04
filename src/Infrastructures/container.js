@@ -28,6 +28,7 @@ const ThreadRepositoryPostgres = require('./repository/ThreadRepositoryPostgres'
 const AddThreadUseCase = require('../Applications/use_case/AddThreadUseCase');
 const GetThreadUseCase = require('../Applications/use_case/GetThreadUseCase');
 const CommentRepository = require('../Domains/comments/CommentRepository');
+const CommentRepositoryPostgres = require('./repository/CommentRepositoryPostgres');
 
 // creating container
 const container = createContainer();
@@ -93,17 +94,23 @@ container.register([
     },
   },
   // Comment Layer
-  // {
-  //   key: CommentRepository.name,
-  //   Class: CommentRepositoryP,
-  //   parameter: {
-  //     dependencies: [
-  //       {
-  //         concrete: bcrypt,
-  //       },
-  //     ],
-  //   },
-  // },
+  {
+    key: CommentRepository.name,
+    Class: CommentRepositoryPostgres,
+    parameter: {
+      dependencies: [
+        {
+          concrete: pool,
+        },
+        {
+          concrete: nanoid,
+        },
+        {
+          concrete: new Date().toISOString(),
+        },
+      ],
+    },
+  },
   {
     key: AuthenticationTokenManager.name,
     Class: JwtTokenManager,

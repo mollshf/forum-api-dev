@@ -4,7 +4,7 @@ describe('NewComment entities', () => {
   it('should throw error when payload did not contain needed property', () => {
     // Arrange
     const newCommentPayload = {
-      idThread: 'nice',
+      threadId: 'nice',
       content: 'okay',
     };
 
@@ -17,7 +17,7 @@ describe('NewComment entities', () => {
   it('should throw error when payload did not meet data type specification', () => {
     // Arrange
     const newCommentPayload = {
-      idThread: 123,
+      threadId: 123,
       content: {},
       owner: true,
     };
@@ -31,16 +31,16 @@ describe('NewComment entities', () => {
   it('should create NewComment object correctly', () => {
     // Arrange
     const newCommentPayload = {
-      idThread: 'thread-992',
+      threadId: 'thread-992',
       content: 'Madu obat mujarab cuii',
       owner: 'user-23908e',
     };
 
     // Action
-    const { idThread, content, owner } = new NewComment(newCommentPayload);
+    const { threadId, content, owner } = new NewComment(newCommentPayload);
 
     // Assert
-    expect(idThread).toEqual(newCommentPayload.idThread);
+    expect(threadId).toEqual(newCommentPayload.threadId);
     expect(content).toEqual(newCommentPayload.content);
     expect(owner).toEqual(newCommentPayload.owner);
   });

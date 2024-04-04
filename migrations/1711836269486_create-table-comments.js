@@ -4,13 +4,13 @@ exports.up = (pgm) => {
       type: 'VARCHAR(50)',
       primaryKey: true,
     },
-    threadId: {
+    thread_id: {
       type: 'VARCHAR(50)',
       primaryKey: true,
     },
     owner: {
       type: 'VARCHAR(50)',
-      notNull: true,
+      notNull: false,
     },
     date: {
       type: 'TEXT',
@@ -26,11 +26,11 @@ exports.up = (pgm) => {
     },
   });
 
-  pgm.addConstraint(
-    'comments',
-    'fk_comments.owner_users.id',
-    'FOREIGN KEY(owner) REFERENCES users(id) ON DELETE CASCADE',
-  );
+  // pgm.addConstraint(
+  //   'comments',
+  //   'fk_comments.owner_users.id',
+  //   'FOREIGN KEY(owner) REFERENCES users(id) ON DELETE CASCADE',
+  // );
 };
 
 exports.down = (pgm) => {
