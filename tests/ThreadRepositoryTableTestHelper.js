@@ -4,7 +4,7 @@ const pool = require('../src/Infrastructures/database/postgres/pool');
 
 const ThreadsTableTestHelper = {
   async addThread({
-    id = 'user-123',
+    id = 'thread-123',
     title = 'absurd',
     body = 'sage is duelist not healer',
     date = '2024',

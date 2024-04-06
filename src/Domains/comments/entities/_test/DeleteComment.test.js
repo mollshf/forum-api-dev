@@ -37,11 +37,11 @@ describe('DeleteComment entities', () => {
     };
 
     // Action
-    const { idThread, threadId, owner } = new DeleteComment(deleteCommentPayload);
+    const { id, threadId, owner } = new DeleteComment(deleteCommentPayload);
 
     // Assert
-    expect(idThread).toEqual(newCommentPayload.idThread);
-    expect(owner).toEqual(newCommentPayload.owner);
-    expect(threadId).toEqual(newCommentPayload.threadId);
+    expect(id).toEqual(deleteCommentPayload.id);
+    expect(owner).toEqual(deleteCommentPayload.owner);
+    expect(threadId).toEqual(deleteCommentPayload.threadId);
   });
 });
