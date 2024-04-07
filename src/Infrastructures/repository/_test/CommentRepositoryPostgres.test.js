@@ -95,8 +95,8 @@ describe('CommentRepository Postgres', () => {
 
       // Assert
       expect(getComment).toEqual([
-        new MainComment({ ...secondComment, username: 'userAB' }),
         new MainComment({ ...firstComment, username: 'userAB' }),
+        new MainComment({ ...secondComment, username: 'userAB' }),
       ]);
     });
 
