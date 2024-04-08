@@ -12,7 +12,7 @@ class AddCommentUseCase {
     const newComment = this._commentRepository.addComment(
       new NewComment({
         ...useCasePayload,
-        owner: useCaseCredential,
+        owner: useCaseCredential.id,
         threadId: useCaseParam.threadId,
       }),
     );

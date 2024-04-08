@@ -54,7 +54,7 @@ describe('AddCommentUseCase', () => {
       new NewComment({
         threadId: useCaseParam.threadId,
         content: useCasePayload.content,
-        owner: useCaseCredential,
+        owner: useCaseCredential.id,
       }),
     );
   });
