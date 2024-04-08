@@ -14,8 +14,8 @@ class CommentRepositoryPostgres extends CommentRepository {
 
   async addComment(payload) {
     const { threadId, content, owner } = payload;
-    const id = `comment-${this._idGenerator()}`;
-    const date = this._dateGenerator();
+    const id = `comment-${this._idGenerator(16)}`;
+    const date = this._dateGenerator;
     const is_delete = false;
 
     const query = {
@@ -33,7 +33,7 @@ class CommentRepositoryPostgres extends CommentRepository {
       FROM comments
       JOIN users ON comments.owner = users.id
       WHERE thread_id = $1
-      ORDER BY comments.id ASC`,
+      ORDER BY comments.date ASC`,
       values: [threadId],
     };
 

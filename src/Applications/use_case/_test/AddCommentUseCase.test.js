@@ -11,7 +11,9 @@ describe('AddCommentUseCase', () => {
       content: 'this is content',
     };
 
-    const useCaseCredential = 'userA';
+    const useCaseCredential = {
+      id: 'userA',
+    };
 
     const useCaseParam = {
       threadId: 'thread-123',
@@ -20,7 +22,7 @@ describe('AddCommentUseCase', () => {
     const expectedAddedComment = new AddedComment({
       id: 'comment-123',
       content: useCasePayload.content,
-      owner: useCaseCredential,
+      owner: useCaseCredential.id,
     });
 
     /* creating dependency of use case */
