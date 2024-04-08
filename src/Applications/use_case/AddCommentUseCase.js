@@ -17,7 +17,6 @@ class AddCommentUseCase {
       }),
     );
 
-    console.log(newComment, 'THIS IS NEW COMENT USE CASE CUI');
     return this._commentRepository.addComment(newComment);
   }
 }

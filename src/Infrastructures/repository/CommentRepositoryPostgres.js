@@ -1,4 +1,5 @@
 const { mapViewCommentData } = require('../../../utils/mapDBtoModel');
+const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 const CommentRepository = require('../../Domains/comments/CommentRepository');
 const AddedComment = require('../../Domains/comments/entities/AddedComment');
@@ -13,7 +14,6 @@ class CommentRepositoryPostgres extends CommentRepository {
 
   async addComment(payload) {
     const { threadId, content, owner } = payload;
-    console.log(threadId, content, owner);
     const id = `comment-${this._idGenerator()}`;
     const date = this._dateGenerator();
     const is_delete = false;
@@ -39,8 +39,6 @@ class CommentRepositoryPostgres extends CommentRepository {
 
     const result = await this._pool.query(query);
 
-    console.log(result.rows.map(mapViewCommentData));
-
     return result.rows.map(mapViewCommentData);
   }
 
@@ -60,6 +58,21 @@ class CommentRepositoryPostgres extends CommentRepository {
 
     if (result.rows[0]?.is_delete) {
       throw new NotFoundError('Comment tidak ditemukan.');
+    }
+  }
+
+  async verifyCommentOwner(payload) {
+    const { commentId, ownerId } = payload;
+
+    const query = {
+      text: `SELECT comments.is_delete FROM comments WHERE id = $1 AND owner = $2`,
+      values: [commentId, ownerId],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rowCount) {
+      throw new AuthorizationError('Anda tidak berhak mengakses comment ini.');
     }
   }
 }

@@ -157,4 +157,35 @@ describe('CommentRepository Postgres', () => {
       ).rejects.toThrow(new NotFoundError('Comment tidak ditemukan.'));
     });
   });
+
+  describe('verifyCommentOwner function', () => {
+    it('should successfully resolve when the comment matches its owner', async () => {
+      // Arrange
+      await CommentTableTestHelper.addcomment({ threadId, userId });
+
+      /* Instantiate the repository */
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {}, {});
+
+      // Action & Assert
+      await expect(
+        commentRepositoryPostgres.verifyCommentOwner({ commentId: 'comment-123', ownerId: userId }),
+      ).resolves.not.toThrow();
+    });
+
+    it('should fail when the comment does not match its owner', async () => {
+      // Arrange
+      await CommentTableTestHelper.addcomment({ threadId, userId });
+
+      /* Instantiate the repository */
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {}, {});
+
+      // Action & Assert
+      await expect(
+        commentRepositoryPostgres.verifyCommentOwner({
+          commentId: 'comment-123',
+          ownerId: 'user-xxx',
+        }),
+      ).rejects.toThrow(new NotFoundError('Anda tidak berhak mengakses comment ini.'));
+    });
+  });
 });

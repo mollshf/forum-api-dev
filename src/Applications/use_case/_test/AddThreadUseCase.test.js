@@ -5,7 +5,7 @@ const NewThread = require('../../../Domains/threads/entities/NewThread');
 const AddThreadUseCase = require('../AddThreadUseCase');
 
 describe('AddThreadUseCase', () => {
-  it('should orchastrating the add thread action correctly', async () => {
+  it('should orchastrating the add comment action correctly', async () => {
     // Arrange
     const useCasePayload = {
       title: 'madu is great drink ever',
