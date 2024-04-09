@@ -10,20 +10,21 @@ const ServerTestHelper = {
       password,
     };
 
-    await server.inject({
+    const responseUser = await server.inject({
       method: 'POST',
       url: '/users',
       payload: { ...userPayload, fullname },
     });
 
-    const authUser = await server.inject({
+    const responseAuth = await server.inject({
       method: 'POST',
       url: '/authentications',
       payload: userPayload,
     });
 
-    const { accessToken } = JSON.parse(authUser.payload).data;
-    return accessToken;
+    const { id } = JSON.parse(responseUser.payload).data.addedUser;
+    const { accessToken } = JSON.parse(responseAuth.payload).data;
+    return { accessToken, userId: id };
   },
 };
 

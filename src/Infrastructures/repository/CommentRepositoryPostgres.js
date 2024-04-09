@@ -52,6 +52,9 @@ class CommentRepositoryPostgres extends CommentRepository {
 
     const result = await this._pool.query(query);
 
+    console.log(result.rowCount, 'THIS IS RESULT FROM POSTGRES REPOSITORY');
+    console.log(result.rows[0]?.is_delete, 'THIS IS RESULT FROM POSTGRES REPOSITORY');
+
     if (!result.rowCount) {
       throw new NotFoundError('Thread tidak ditemukan.');
     }
@@ -74,6 +77,16 @@ class CommentRepositoryPostgres extends CommentRepository {
     if (!result.rowCount) {
       throw new AuthorizationError('Anda tidak berhak mengakses comment ini.');
     }
+  }
+
+  async deleteComment(commentId) {
+    const deleteComment = true;
+    const query = {
+      text: `UPDATE comments SET is_delete = $1 WHERE id = $2`,
+      values: [deleteComment, commentId],
+    };
+
+    await this._pool.query(query);
   }
 }
 

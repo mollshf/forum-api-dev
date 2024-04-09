@@ -2,10 +2,12 @@ const CommentRepository = require('../../../Domains/comments/CommentRepository')
 const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
 const DeleteCommentUseCase = require('../DeleteCommentUseCase');
 
-describe('AddCommentUseCase', () => {
+describe('DeleteCommentUseCase', () => {
   it('should orchastrating the delete comment action correctly', async () => {
     // Arrange
-    const useCaseCredential = 'userA';
+    const useCaseCredential = {
+      id: 'userA',
+    };
     const useCaseParam = {
       threadId: 'thread-123',
       commentId: 'comment-123',
@@ -41,7 +43,7 @@ describe('AddCommentUseCase', () => {
     expect(mockCommentRepository.verifyExistingComment).toBeCalledWith(useCaseParam);
     expect(mockCommentRepository.verifyCommentOwner).toBeCalledWith({
       commentId: useCaseParam.commentId,
-      ownerId: useCaseCredential,
+      ownerId: useCaseCredential.id,
     });
     expect(mockCommentRepository.deleteComment).toBeCalledWith(expectedDeletedComment.id);
   });

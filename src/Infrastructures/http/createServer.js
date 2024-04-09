@@ -57,12 +57,10 @@ const createServer = async (container) => {
   server.ext('onPreResponse', (request, h) => {
     // mendapatkan konteks response dari request
     const { response } = request;
-    console.log(response, 'ini dari luar pengkondisian');
 
     if (response instanceof Error) {
       // bila response tersebut error, tangani sesuai kebutuhan
       const translatedError = DomainErrorTranslator.translate(response);
-      console.log(translatedError, 'ini di dalam pengkondisian error');
 
       // penanganan client error secara internal.
       if (translatedError instanceof ClientError) {
@@ -85,6 +83,7 @@ const createServer = async (container) => {
         message: 'terjadi kegagalan pada server kami',
       });
       newResponse.code(500);
+      console.log(response, 'INI RESPONSE KALO ERROR GK DI KETAUHUI');
       return newResponse;
     }
 

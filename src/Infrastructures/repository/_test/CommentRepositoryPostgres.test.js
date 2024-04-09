@@ -73,7 +73,7 @@ describe('CommentRepository Postgres', () => {
       const firstComment = {
         id: 'comment-101',
         content: 'sage is duelist not healer',
-        date: '2024',
+        date: '2023',
         isDelete: false,
       };
       const secondComment = {

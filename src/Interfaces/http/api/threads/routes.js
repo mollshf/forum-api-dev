@@ -2,10 +2,15 @@ const routes = (handler) => [
   {
     method: 'POST',
     path: '/threads',
-    handler: handler.postThreadHandler,
+    handler: (request, h) => handler.postThreadHandler(request, h),
     options: {
       auth: 'forum_api',
     },
+  },
+  {
+    method: 'GET',
+    path: '/threads/{threadId}',
+    handler: (request, h) => handler.getThreadHandler(request, h),
   },
 ];
 

@@ -26,8 +26,7 @@ describe('/threads endpoint', () => {
       };
 
       const server = await createServer(container);
-
-      const getToken = await ServerTestHelper.getResponseOfToken(server, {});
+      const { accessToken } = await ServerTestHelper.getResponseOfToken(server, {});
 
       // Action
       const response = await server.inject({
@@ -35,7 +34,7 @@ describe('/threads endpoint', () => {
         url: '/threads',
         payload: requestPayload,
         headers: {
-          authorization: `Bearer ${getToken}`,
+          authorization: `Bearer ${accessToken}`,
         },
       });
 
@@ -43,7 +42,11 @@ describe('/threads endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(201);
       expect(responseJson.status).toEqual('success');
+      expect(responseJson.data).toBeDefined();
       expect(responseJson.data.addedThread).toBeDefined();
+      expect(responseJson.data.addedThread.id).toBeDefined();
+      expect(responseJson.data.addedThread.title).toBeDefined();
+      expect(responseJson.data.addedThread.owner).toBeDefined();
     });
 
     it('should return a 400 status code when the request body is incomplete', async () => {
@@ -53,8 +56,7 @@ describe('/threads endpoint', () => {
       };
 
       const server = await createServer(container);
-
-      const getToken = await ServerTestHelper.getResponseOfToken(server, {});
+      const { accessToken } = await ServerTestHelper.getResponseOfToken(server, {});
 
       // Action
       const response = await server.inject({
@@ -62,7 +64,7 @@ describe('/threads endpoint', () => {
         url: '/threads',
         payload: requestPayload,
         headers: {
-          authorization: `Bearer ${getToken}`,
+          authorization: `Bearer ${accessToken}`,
         },
       });
 
