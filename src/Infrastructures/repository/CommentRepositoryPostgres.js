@@ -52,9 +52,6 @@ class CommentRepositoryPostgres extends CommentRepository {
 
     const result = await this._pool.query(query);
 
-    console.log(result.rowCount, 'THIS IS RESULT FROM POSTGRES REPOSITORY');
-    console.log(result.rows[0]?.is_delete, 'THIS IS RESULT FROM POSTGRES REPOSITORY');
-
     if (!result.rowCount) {
       throw new NotFoundError('Thread tidak ditemukan.');
     }

@@ -51,7 +51,7 @@ describe('comments endpoint', () => {
       expect(responseJson.data.addedComment.owner).toBeDefined();
     });
 
-    it('should respond with a 400 status code if the request body is incomplete or does not meet the specified data types', async () => {
+    it('should return a 400 status code for incomplete or invalid request body data types', async () => {
       // Arrange
       const badCommentPayload = [{ content: 123 }, {}];
       const requestPayload =
@@ -135,8 +135,6 @@ describe('comments endpoint', () => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-
-      console.log(response.payload, 'INI ADALAH RESPONSE DARI INJECT DELETE');
 
       // Assert
       const responseJson = JSON.parse(response.payload);
