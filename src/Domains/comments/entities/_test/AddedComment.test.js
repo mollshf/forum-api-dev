@@ -37,10 +37,10 @@ describe('AddedComment entities', () => {
     };
 
     // Action
-    const { threadId, content, owner } = new AddedComment(newCommentPayload);
+    const { id, content, owner } = new AddedComment(newCommentPayload);
 
     // Assert
-    expect(threadId).toEqual(newCommentPayload.threadId);
+    expect(id).toEqual(newCommentPayload.id);
     expect(content).toEqual(newCommentPayload.content);
     expect(owner).toEqual(newCommentPayload.owner);
   });
