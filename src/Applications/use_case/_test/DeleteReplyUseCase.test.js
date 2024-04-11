@@ -1,4 +1,4 @@
-const RepliesRepository = require('../../../Domains/replies/RepliesRepository');
+const ReplyRepository = require('../../../Domains/replies/ReplyRepository');
 const DeleteReplyUseCase = require('../DeleteReplyUseCase');
 
 describe('DeleteReplyUseCase', () => {
@@ -19,7 +19,7 @@ describe('DeleteReplyUseCase', () => {
     };
 
     /* creating dependency of use case */
-    const mockReplyRepository = new RepliesRepository();
+    const mockReplyRepository = new ReplyRepository();
 
     /* mocking needed functions */
     mockReplyRepository.verifyExistingReply = jest.fn().mockImplementation(() => Promise.resolve());

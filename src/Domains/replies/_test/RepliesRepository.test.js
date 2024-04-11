@@ -9,16 +9,13 @@ describe('CommentRepository', () => {
     await expect(repliesRepository.addReply({})).rejects.toThrow(
       'REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED',
     );
-    await expect(repliesRepository.getReplyByCommentId('')).rejects.toThrow(
-      'REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED',
-    );
     await expect(repliesRepository.verifyExistingReply({})).rejects.toThrow(
       'REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED',
     );
     await expect(repliesRepository.verifyReplyOwner({})).rejects.toThrow(
       'REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED',
     );
-    await expect(repliesRepository.deleteReply('')).rejects.toThrow(
+    await expect(repliesRepository.deleteReplyById('')).rejects.toThrow(
       'REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED',
     );
   });

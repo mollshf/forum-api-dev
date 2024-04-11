@@ -116,16 +116,16 @@ describe('comments endpoint', () => {
       const threadId = 'thread-123';
       const commentId = 'comment-123';
 
+      const { accessToken, userId } = await ServerTestHelper.getResponseOfToken(server, {});
+
       /* other user comment */
+      await ThreadsTableTestHelper.addThread({ id: threadId, owner: userId });
       await UsersTableTestHelper.addUser({ id: 'user-xxx' });
       await CommentTableTestHelper.addcomment({
         id: commentId,
         threadId: threadId,
         owner: 'user-xxx',
       });
-
-      const { accessToken, userId } = await ServerTestHelper.getResponseOfToken(server, {});
-      await ThreadsTableTestHelper.addThread({ id: threadId, owner: userId });
 
       // Action
       const response = await server.inject({

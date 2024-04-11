@@ -28,7 +28,7 @@ describe('DeleteCommentUseCase', () => {
       .fn()
       .mockImplementation(() => Promise.resolve());
 
-    mockCommentRepository.deleteComment = jest.fn().mockImplementation(() => Promise.resolve());
+    mockCommentRepository.deleteCommentById = jest.fn().mockImplementation(() => Promise.resolve());
 
     /* creating use case instance */
     const deleteCommentUseCase = new DeleteCommentUseCase({
@@ -44,6 +44,8 @@ describe('DeleteCommentUseCase', () => {
       commentId: useCaseParam.commentId,
       ownerId: useCaseCredential.id,
     });
-    expect(mockCommentRepository.deleteComment).toBeCalledWith(expectedDeletedComment.commentId);
+    expect(mockCommentRepository.deleteCommentById).toBeCalledWith(
+      expectedDeletedComment.commentId,
+    );
   });
 });

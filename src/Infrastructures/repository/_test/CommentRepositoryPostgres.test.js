@@ -117,7 +117,7 @@ describe('CommentRepository Postgres', () => {
   describe('verifyExistingComment function', () => {
     it('should successfully resolve when the comment exists', async () => {
       // Arrange
-      await CommentTableTestHelper.addcomment({ threadId, userId });
+      await CommentTableTestHelper.addcomment({ threadId, owner: userId });
 
       /* Instantiate the repository */
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {}, {});
@@ -144,7 +144,7 @@ describe('CommentRepository Postgres', () => {
 
     it('should throw an error when the comment is already deleted ', async () => {
       // Arrange
-      await CommentTableTestHelper.addcomment({ threadId, userId, isDelete: true });
+      await CommentTableTestHelper.addcomment({ threadId, owner: userId, isDelete: true });
       /* Instantiate the repository */
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {}, {});
 
@@ -161,7 +161,7 @@ describe('CommentRepository Postgres', () => {
   describe('verifyCommentOwner function', () => {
     it('should successfully resolve when the comment matches its owner', async () => {
       // Arrange
-      await CommentTableTestHelper.addcomment({ threadId, userId });
+      await CommentTableTestHelper.addcomment({ threadId, owner: userId });
 
       /* Instantiate the repository */
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {}, {});
@@ -174,7 +174,7 @@ describe('CommentRepository Postgres', () => {
 
     it('should fail when the comment does not match its owner', async () => {
       // Arrange
-      await CommentTableTestHelper.addcomment({ threadId, userId });
+      await CommentTableTestHelper.addcomment({ threadId, owner: userId });
 
       /* Instantiate the repository */
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {}, {});
@@ -186,6 +186,29 @@ describe('CommentRepository Postgres', () => {
           ownerId: 'user-xxx',
         }),
       ).rejects.toThrow(new NotFoundError('Anda tidak berhak mengakses comment ini.'));
+    });
+  });
+
+  describe('deleteCommentById function', () => {
+    it('should execute reply deletion without errors', async () => {
+      // Arrange
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {}, {});
+      await CommentTableTestHelper.addcomment({ threadId, owner: userId });
+
+      // Action & Assert
+      await expect(
+        commentRepositoryPostgres.deleteCommentById('comment-123'),
+      ).resolves.not.toThrow();
+    });
+
+    it('should throw an error if the comment has already been deleted', async () => {
+      // Arrange
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {}, {});
+
+      // Action & Assert
+      await expect(commentRepositoryPostgres.deleteCommentById('comment-123')).rejects.toThrow(
+        new NotFoundError('Gagal menghapus, comment tidak ditemukan.'),
+      );
     });
   });
 });

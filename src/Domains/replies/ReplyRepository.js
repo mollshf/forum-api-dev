@@ -1,8 +1,5 @@
-class RepliesRepository {
+class ReplyRepository {
   async addReply(payload) {
-    throw new Error('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
-  }
-  async getReplyByCommentId(id) {
     throw new Error('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
   async verifyExistingReply(payload) {
@@ -11,9 +8,9 @@ class RepliesRepository {
   async verifyReplyOwner(payload) {
     throw new Error('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
-  async deleteReply(id) {
+  async deleteReplyById(id) {
     throw new Error('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 }
 
-module.exports = RepliesRepository;
+module.exports = ReplyRepository;
