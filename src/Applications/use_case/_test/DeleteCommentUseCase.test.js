@@ -1,12 +1,11 @@
 const CommentRepository = require('../../../Domains/comments/CommentRepository');
-const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
 const DeleteCommentUseCase = require('../DeleteCommentUseCase');
 
 describe('DeleteCommentUseCase', () => {
   it('should orchastrating the delete comment action correctly', async () => {
     // Arrange
     const useCaseCredential = {
-      id: 'userA',
+      id: 'user-123',
     };
     const useCaseParam = {
       threadId: 'thread-123',
@@ -14,7 +13,7 @@ describe('DeleteCommentUseCase', () => {
     };
 
     const expectedDeletedComment = {
-      id: useCaseParam.commentId,
+      commentId: useCaseParam.commentId,
     };
 
     /* creating dependency of use case */
@@ -45,6 +44,6 @@ describe('DeleteCommentUseCase', () => {
       commentId: useCaseParam.commentId,
       ownerId: useCaseCredential.id,
     });
-    expect(mockCommentRepository.deleteComment).toBeCalledWith(expectedDeletedComment.id);
+    expect(mockCommentRepository.deleteComment).toBeCalledWith(expectedDeletedComment.commentId);
   });
 });
