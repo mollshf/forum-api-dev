@@ -9,10 +9,10 @@ describe('CommentRepository', () => {
     await expect(commentRepository.addComment({})).rejects.toThrow(
       'COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED',
     );
-    await expect(commentRepository.verifyExistingComment('')).rejects.toThrow(
+    await expect(commentRepository.verifyExistingComment({})).rejects.toThrow(
       'COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED',
     );
-    await expect(commentRepository.verifyCommentOwner('')).rejects.toThrow(
+    await expect(commentRepository.verifyCommentOwner({})).rejects.toThrow(
       'COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED',
     );
     await expect(commentRepository.deleteComment('')).rejects.toThrow(

@@ -5,10 +5,10 @@ class CommentRepository {
   async getCommentByThreadId(id) {
     throw new Error('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
-  async verifyExistingComment(id) {
+  async verifyExistingComment(payload) {
     throw new Error('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
-  async verifyCommentOwner(id) {
+  async verifyCommentOwner(payload) {
     throw new Error('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
   async deleteComment(id) {
