@@ -2,6 +2,7 @@ const AuthorizationError = require('../../Commons/exceptions/AuthorizationError'
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 const ReplyRepository = require('../../Domains/replies/ReplyRepository');
 const AddedReply = require('../../Domains/replies/entities/AddedReply');
+const MainReply = require('../../Domains/replies/entities/MainReply');
 
 class ReplyRepositoryPostgres extends ReplyRepository {
   constructor(pool, idGenerator, dateGenerator) {
@@ -29,8 +30,28 @@ class ReplyRepositoryPostgres extends ReplyRepository {
     };
 
     const result = await this._pool.query(query);
-    console.log({ ...result.rows[0] }, 'THIS IS RESULT FROM POOL REPLY');
     return new AddedReply({ ...result.rows[0] });
+  }
+
+  async getReplyByThreadId(threadId) {
+    const query = {
+      text: `SELECT replies.id, replies.comment_id, replies.is_delete, replies.content, replies.date, users.username 
+        FROM replies 
+        INNER JOIN comments ON replies.comment_id = comments.id
+        INNER JOIN users ON replies.owner = users.id
+        WHERE comments.thread_id = $1
+        ORDER BY date ASC`,
+      values: [threadId],
+    };
+
+    const result = await this._pool.query(query);
+    return result.rows.map((data) => {
+      return new MainReply({
+        ...data,
+        commentId: data.comment_id,
+        isDelete: data.is_delete,
+      });
+    });
   }
 
   async verifyExistingReply(payload) {

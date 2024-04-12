@@ -4,6 +4,7 @@ const ThreadsTableTestHelper = require('../../../../tests/ThreadRepositoryTableT
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const AddedReply = require('../../../Domains/replies/entities/AddedReply');
+const MainReply = require('../../../Domains/replies/entities/MainReply');
 const NewReply = require('../../../Domains/replies/entities/NewReply');
 const pool = require('../../database/postgres/pool');
 const ReplyRepositoryPostgres = require('../ReplyRepositoryPostgres');
@@ -63,6 +64,49 @@ describe('ReplyRepositoryPostgres', () => {
 
       expect(checkReply).toHaveLength(1);
       expect(addedReply).toStrictEqual(expectedAddedReply);
+    });
+  });
+
+  describe('getReplyByThreadId function', () => {
+    it('should retrieve all replies associated with a given threadId', async () => {
+      // Arrange
+
+      /* first user and comment using above configuration */
+      /* second user */
+      await UsersTableTestHelper.addUser({ id: 'user-321', username: 'userCBA' });
+      /* second comment */
+      await CommentTableTestHelper.addcomment({ id: 'comment-321', threadId });
+
+      const replyA = {
+        id: 'reply-123',
+        commentId: 'comment-123',
+        content: 'replyA content',
+        date: '12042024',
+        isDelete: false,
+      };
+      const replyB = {
+        id: 'reply-124',
+        commentId: 'comment-321',
+        content: 'replyB content',
+        date: '13042024',
+        isDelete: false,
+      };
+
+      const expectedReplias = [
+        new MainReply({ ...replyA, username: 'userABC' }),
+        new MainReply({ ...replyB, username: 'userCBA' }),
+      ];
+
+      await ReplyTableTestHelper.addReply({ ...replyA, owner: 'user-123' });
+      await ReplyTableTestHelper.addReply({ ...replyB, owner: 'user-321' });
+
+      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {}, {});
+
+      // Action
+      const getReplies = await replyRepositoryPostgres.getReplyByThreadId('thread-123');
+
+      // Assert
+      expect(getReplies).toEqual(expectedReplias);
     });
   });
 

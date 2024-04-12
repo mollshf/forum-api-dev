@@ -9,6 +9,9 @@ describe('CommentRepository', () => {
     await expect(repliesRepository.addReply({})).rejects.toThrow(
       'REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED',
     );
+    await expect(repliesRepository.getReplyByThreadId('')).rejects.toThrow(
+      'REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED',
+    );
     await expect(repliesRepository.verifyExistingReply({})).rejects.toThrow(
       'REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED',
     );

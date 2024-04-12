@@ -1,8 +1,8 @@
-const { mapViewCommentData } = require('../../../utils/mapDBtoModel');
 const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 const CommentRepository = require('../../Domains/comments/CommentRepository');
 const AddedComment = require('../../Domains/comments/entities/AddedComment');
+const MainComment = require('../../Domains/comments/entities/MainComment');
 
 class CommentRepositoryPostgres extends CommentRepository {
   constructor(pool, idGenerator, dateGenerator) {
@@ -39,7 +39,13 @@ class CommentRepositoryPostgres extends CommentRepository {
 
     const result = await this._pool.query(query);
 
-    return result.rows.map(mapViewCommentData);
+    return result.rows.map((data) => {
+      return new MainComment({
+        ...data,
+        isDelete: data.is_delete,
+        replies: [],
+      });
+    });
   }
 
   async verifyExistingComment(payload) {

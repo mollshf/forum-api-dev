@@ -23,6 +23,7 @@ describe('MainComment entities', () => {
       username: 'user-omoshiroi12',
       date: '2024',
       content: 'kerennn!!',
+      replies: 123,
       isDelete: 'false',
     };
 
@@ -39,17 +40,19 @@ describe('MainComment entities', () => {
       username: 'user-omoshiroi12',
       date: '2024',
       content: 'kerennn!!',
+      replies: [],
       isDelete: false,
     };
 
     // Action
-    const { id, username, date, content, isDelete } = new MainComment(mainCommentPayload);
+    const { id, username, date, content, replies, isDelete } = new MainComment(mainCommentPayload);
 
     // Assert
     expect(id).toEqual(mainCommentPayload.id);
     expect(username).toEqual(mainCommentPayload.username);
     expect(date).toEqual(mainCommentPayload.date);
     expect(content).toEqual(mainCommentPayload.content);
+    expect(replies).toEqual(mainCommentPayload.replies);
     expect(isDelete).toEqual(mainCommentPayload.isDelete);
   });
 });

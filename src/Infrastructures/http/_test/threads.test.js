@@ -91,6 +91,7 @@ describe('/threads endpoint', () => {
 
       /* for creating comments */
       await UsersTableTestHelper.addUser({ id: 'user-002', username: 'komoe' });
+
       await CommentTableTestHelper.addcomment({
         id: 'comment-123',
         threadId,
@@ -113,6 +114,7 @@ describe('/threads endpoint', () => {
 
       // Assert
       const responseJson = JSON.parse(response.payload);
+      console.log('INI ADALAH RESPONJSON GET THREAD', responseJson);
       expect(response.statusCode).toEqual(200);
       expect(responseJson.status).toEqual('success');
       expect(responseJson.data).toBeDefined();
