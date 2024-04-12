@@ -16,7 +16,7 @@ describe('ReplyRepositoryPostgres', () => {
   beforeAll(async () => {
     await UsersTableTestHelper.addUser({ id: userId, username: 'userABC' });
     await ThreadsTableTestHelper.addThread({ id: threadId, owner: userId });
-    await CommentTableTestHelper.addcomment({ id: commentId, owner: userId });
+    await CommentTableTestHelper.addcomment({ id: commentId, threadId, owner: userId });
   });
   afterEach(async () => {
     await ReplyTableTestHelper.cleanTable();
@@ -59,9 +59,7 @@ describe('ReplyRepositoryPostgres', () => {
       const addedReply = await replyRepositoryPostgres.addReply(newReplyPayload);
 
       // Assert
-      const checkReply = await CommentTableTestHelper.findCommentById(
-        `comment-${fakeIdGenerator()}`,
-      );
+      const checkReply = await ReplyTableTestHelper.findReplyById(`reply-${fakeIdGenerator()}`);
 
       expect(checkReply).toHaveLength(1);
       expect(addedReply).toStrictEqual(expectedAddedReply);
@@ -78,7 +76,7 @@ describe('ReplyRepositoryPostgres', () => {
 
       // Action & Assert
       await expect(
-        replyRepositoryPostgres.verifyExistingReply({ commentId, replyId: 'reply-123' }),
+        replyRepositoryPostgres.verifyExistingReply({ threadId, commentId, replyId: 'reply-123' }),
       ).resolves.not.toThrow();
     });
 
@@ -90,10 +88,11 @@ describe('ReplyRepositoryPostgres', () => {
       // Action & Assert
       await expect(
         replyRepositoryPostgres.verifyExistingReply({
+          threadId,
           commentId,
           replyId: 'reply-xxx',
         }),
-      ).rejects.toThrow(new NotFoundError('Comment tidak ditemukan.'));
+      ).rejects.toThrow(new NotFoundError('Reply tidak ditemukan.'));
     });
 
     it('should throw an error when the reply is already deleted ', async () => {
@@ -104,11 +103,43 @@ describe('ReplyRepositoryPostgres', () => {
 
       // Action & Assert
       await expect(
-        replyRepositoryPostgres.verifyExistingComment({
+        replyRepositoryPostgres.verifyExistingReply({
+          threadId,
           commentId,
           replyId: 'reply-123',
         }),
       ).rejects.toThrow(new NotFoundError('Reply tidak ditemukan.'));
+    });
+  });
+
+  describe('verifyReplyOwner function', () => {
+    it('should successfully resolve when the reply matches its owner', async () => {
+      // Arrange
+      await ReplyTableTestHelper.addReply({ commentId, owner: userId });
+
+      /* Instantiate the repository */
+      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {}, {});
+
+      // Action & Assert
+      await expect(
+        replyRepositoryPostgres.verifyReplyOwner({ replyId: 'reply-123', ownerId: userId }),
+      ).resolves.not.toThrow();
+    });
+
+    it('should fail when the reply does not match its owner', async () => {
+      // Arrange
+      await ReplyTableTestHelper.addReply({ commentId, owner: userId });
+
+      /* Instantiate the repository */
+      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {}, {});
+
+      // Action & Assert
+      await expect(
+        replyRepositoryPostgres.verifyReplyOwner({
+          replyId: 'reply-123',
+          ownerId: 'user-xxx',
+        }),
+      ).rejects.toThrow(new NotFoundError('Anda tidak berhak mengakses reply ini.'));
     });
   });
 

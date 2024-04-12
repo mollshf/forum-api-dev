@@ -1,4 +1,4 @@
-const RepliesRepository = require('../RepliesRepository');
+const RepliesRepository = require('../ReplyRepository');
 
 describe('CommentRepository', () => {
   it('should throw error when invoke abstract behavior', async () => {
