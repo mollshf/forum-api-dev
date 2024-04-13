@@ -8,18 +8,18 @@ describe('AddCommentUseCase', () => {
   it('should orchastrating the add thread action correctly', async () => {
     // Arrange
     const useCasePayload = {
-      content: 'this is content',
+      content: 'comment content',
     };
 
     const useCaseCredential = {
-      id: 'userA',
+      id: 'user-123',
     };
 
     const useCaseParam = {
       threadId: 'thread-123',
     };
 
-    const expectedAddedComment = new AddedComment({
+    const mockAddedComment = new AddedComment({
       id: 'comment-123',
       content: useCasePayload.content,
       owner: useCaseCredential.id,
@@ -36,7 +36,7 @@ describe('AddCommentUseCase', () => {
 
     mockCommentRepository.addComment = jest
       .fn()
-      .mockImplementation(() => Promise.resolve(expectedAddedComment));
+      .mockImplementation(() => Promise.resolve(mockAddedComment));
 
     /* creating use case instance */
     const addCommentUsecase = new AddCommentUseCase({
@@ -52,7 +52,14 @@ describe('AddCommentUseCase', () => {
     );
 
     // Assert
-    expect(addedComment).toStrictEqual(expectedAddedComment);
+    expect(addedComment).toStrictEqual(
+      new AddedComment({
+        id: 'comment-123',
+        content: useCasePayload.content,
+        owner: useCaseCredential.id,
+      }),
+    );
+
     expect(mockThreadRepository.verifyThreadAvailability).toBeCalledWith(useCaseParam.threadId);
     expect(mockCommentRepository.addComment).toBeCalledWith(
       new NewComment({

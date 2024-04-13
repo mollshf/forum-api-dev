@@ -9,11 +9,11 @@ describe('AddReplyUseCase', () => {
   it('should orchastrating the add thread action correctly', async () => {
     // Arrange
     const useCasePayload = {
-      content: 'this is content',
+      content: 'reply content',
     };
 
     const useCaseCredential = {
-      id: 'userA',
+      id: 'user-123',
     };
 
     const useCaseParam = {
@@ -21,7 +21,7 @@ describe('AddReplyUseCase', () => {
       threadId: 'thread-123',
     };
 
-    const expectedAddedReply = new AddedReply({
+    const mockAddedReply = new AddedReply({
       id: 'reply-123',
       content: useCasePayload.content,
       owner: useCaseCredential.id,
@@ -43,7 +43,7 @@ describe('AddReplyUseCase', () => {
 
     mockReplyRepository.addReply = jest
       .fn()
-      .mockImplementation(() => Promise.resolve(expectedAddedReply));
+      .mockImplementation(() => Promise.resolve(mockAddedReply));
 
     /* creating use case instance */
     const addReplyUseCase = new AddReplyUseCase({
@@ -60,10 +60,15 @@ describe('AddReplyUseCase', () => {
     );
 
     // Assert
-    expect(addedReply).toStrictEqual(expectedAddedReply);
+    expect(addedReply).toStrictEqual(
+      new AddedReply({
+        id: 'reply-123',
+        content: useCasePayload.content,
+        owner: useCaseCredential.id,
+      }),
+    );
     expect(mockThreadRepository.verifyThreadAvailability).toBeCalledWith(useCaseParam.threadId);
     expect(mockCommentRepository.verifyExistingComment).toBeCalledWith(useCaseParam);
-
     expect(mockReplyRepository.addReply).toBeCalledWith(
       new NewReply({
         commentId: useCaseParam.commentId,

@@ -1,3 +1,5 @@
+const MainThread = require('../../Domains/threads/entities/MainThread');
+
 class GetThreadUseCase {
   constructor({ threadRepository, commentRepository, replyRepository }) {
     this._threadRepository = threadRepository;
@@ -13,7 +15,7 @@ class GetThreadUseCase {
     thread.comments = this._changeContentOfComments(comment);
     thread.comments = this._changeContentOfRepliesComment(thread.comments, reply);
 
-    return thread;
+    return new MainThread(thread);
   }
 
   _changeContentOfComments(arr) {

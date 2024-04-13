@@ -10,18 +10,15 @@ describe('GetThreadUseCase', () => {
   describe('GetThreadUseCase execute function', () => {
     it('should orchastrating the get thread action correctly', async () => {
       // Arrange
-      const useCasePayload = {
-        threadId: 'thread-123',
-      };
+      const threadId = 'thread-123';
 
-      const expectedMainThread = new MainThread({
+      const mockGetTheThreadById = {
         id: 'thread-subarashi12',
         title: 'valorant vct',
         body: 'APAC is on fire',
         date: `2024`,
-        username: 'user-omoshiroi12',
-        comments: [],
-      });
+        username: 'userABC',
+      };
 
       const mockComment = [
         new MainComment({
@@ -69,7 +66,7 @@ describe('GetThreadUseCase', () => {
       /* mocking needed function */
       mockThreadRepository.getTheThreadById = jest
         .fn()
-        .mockImplementation(() => Promise.resolve(expectedMainThread));
+        .mockImplementation(() => Promise.resolve(mockGetTheThreadById));
 
       mockCommentRepository.getCommentByThreadId = jest
         .fn()
@@ -116,17 +113,17 @@ describe('GetThreadUseCase', () => {
         .mockImplementation(() => [mockCommentA, mockCommentB]);
 
       // Action
-      const getThread = await getThreadUseCase.execute(useCasePayload);
+      const getThread = await getThreadUseCase.execute(threadId);
 
       // Assert
       expect(getThread).toEqual(
         new MainThread({
-          ...expectedMainThread,
+          ...mockGetTheThreadById,
           comments: expectedComment,
         }),
       );
-      expect(mockThreadRepository.getTheThreadById).toBeCalledWith(useCasePayload);
-      expect(mockCommentRepository.getCommentByThreadId).toBeCalledWith(useCasePayload);
+      expect(mockThreadRepository.getTheThreadById).toBeCalledWith(threadId);
+      expect(mockCommentRepository.getCommentByThreadId).toBeCalledWith(threadId);
       expect(getThreadUseCase._changeContentOfComments).toBeCalledWith(mockComment);
       expect(getThreadUseCase._changeContentOfComments).toHaveBeenCalled();
     });
