@@ -109,4 +109,34 @@ describe('ThreadRepository postgres', () => {
       expect(thread).toStrictEqual(expectedGetThread);
     });
   });
+
+  describe('verifyThreadAvailability', () => {
+    it('should successfully resolve when the thread exists', async () => {
+      // Arrange
+      const userId = 'user-123';
+      const threadId = 'thread-123';
+      await UsersTableTestHelper.addUser({ id: userId, username: 'USERABC' });
+      await ThreadsTableTestHelper.addThread({ id: threadId, owner: userId });
+
+      /* Instantiate the repository */
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {}, {});
+
+      // Action & Assert
+      await expect(
+        threadRepositoryPostgres.verifyThreadAvailability(threadId),
+      ).resolves.not.toThrowError();
+    });
+
+    it('should throw an error when the thread does not exist', async () => {
+      // Arrange
+
+      /* Instantiate the repository */
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {}, {});
+
+      // Action & Assert
+      await expect(threadRepositoryPostgres.verifyThreadAvailability('thread-xxx')).rejects.toThrow(
+        new NotFoundError('Thread tidak ditemukan.'),
+      );
+    });
+  });
 });

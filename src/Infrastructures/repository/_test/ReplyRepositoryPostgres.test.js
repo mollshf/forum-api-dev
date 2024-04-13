@@ -121,7 +121,7 @@ describe('ReplyRepositoryPostgres', () => {
       // Action & Assert
       await expect(
         replyRepositoryPostgres.verifyExistingReply({ threadId, commentId, replyId: 'reply-123' }),
-      ).resolves.not.toThrow();
+      ).resolves.not.toThrowError();
     });
 
     it('should throw an error when the reply does not exist ', async () => {
@@ -167,7 +167,7 @@ describe('ReplyRepositoryPostgres', () => {
       // Action & Assert
       await expect(
         replyRepositoryPostgres.verifyReplyOwner({ replyId: 'reply-123', ownerId: userId }),
-      ).resolves.not.toThrow();
+      ).resolves.not.toThrowError();
     });
 
     it('should fail when the reply does not match its owner', async () => {
@@ -195,6 +195,9 @@ describe('ReplyRepositoryPostgres', () => {
 
       // Action & Assert
       await expect(replyRepositoryPostgres.deleteReplyById('reply-123')).resolves.not.toThrow();
+
+      const checkIsDelete = await ReplyTableTestHelper.findReplyById('reply-123');
+      expect(checkIsDelete[0].is_delete).toEqual(true);
     });
 
     it('should throw an error if the reply has already been deleted', async () => {

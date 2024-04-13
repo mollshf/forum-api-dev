@@ -1,6 +1,7 @@
 const CommentTableTestHelper = require('../../../../tests/CommentTableTestHelper');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadRepositoryTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
+const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
 const InvariantError = require('../../../Commons/exceptions/InvariantError');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const AddedComment = require('../../../Domains/comments/entities/AddedComment');
@@ -127,7 +128,7 @@ describe('CommentRepository Postgres', () => {
       // Action & Assert
       await expect(
         commentRepositoryPostgres.verifyExistingComment({ threadId, commentId: 'comment-123' }),
-      ).resolves.not.toThrow();
+      ).resolves.not.toThrowError();
     });
 
     it('should throw an error when the comment does not exist ', async () => {
@@ -171,7 +172,7 @@ describe('CommentRepository Postgres', () => {
       // Action & Assert
       await expect(
         commentRepositoryPostgres.verifyCommentOwner({ commentId: 'comment-123', ownerId: userId }),
-      ).resolves.not.toThrow();
+      ).resolves.not.toThrowError();
     });
 
     it('should fail when the comment does not match its owner', async () => {
@@ -187,12 +188,12 @@ describe('CommentRepository Postgres', () => {
           commentId: 'comment-123',
           ownerId: 'user-xxx',
         }),
-      ).rejects.toThrow(new NotFoundError('Anda tidak berhak mengakses comment ini.'));
+      ).rejects.toThrow(new AuthorizationError('Anda tidak berhak mengakses comment ini.'));
     });
   });
 
   describe('deleteCommentById function', () => {
-    it('should execute reply deletion without errors', async () => {
+    it('should delete reply without errors and set is_delete to true', async () => {
       // Arrange
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {}, {});
       await CommentTableTestHelper.addcomment({ threadId, owner: userId });
@@ -200,7 +201,10 @@ describe('CommentRepository Postgres', () => {
       // Action & Assert
       await expect(
         commentRepositoryPostgres.deleteCommentById('comment-123'),
-      ).resolves.not.toThrow();
+      ).resolves.not.toThrowError();
+
+      const checkIsDelete = await CommentTableTestHelper.findCommentById('comment-123');
+      expect(checkIsDelete[0].is_delete).toEqual(true);
     });
 
     it('should throw an error if the comment has already been deleted', async () => {

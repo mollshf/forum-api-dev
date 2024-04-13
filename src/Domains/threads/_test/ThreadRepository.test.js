@@ -12,5 +12,8 @@ describe('ThreadRepository', () => {
     await expect(threaRepository.getTheThreadById('')).rejects.toThrow(
       'THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED',
     );
+    await expect(threaRepository.verifyThreadAvailability('')).rejects.toThrow(
+      'THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED',
+    );
   });
 });

@@ -13,7 +13,7 @@ class AddCommentUseCase {
       threadId: useCaseParam.threadId,
     });
 
-    await this._threadRepository.getTheThreadById(useCaseParam.threadId);
+    await this._threadRepository.verifyThreadAvailability(useCaseParam.threadId);
 
     return this._commentRepository.addComment(newComment);
   }

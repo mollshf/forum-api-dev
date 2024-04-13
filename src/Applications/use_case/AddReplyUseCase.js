@@ -14,7 +14,7 @@ class AddReplyUseCase {
       commentId: useCaseParam.commentId,
     });
 
-    await this._threadRepository.getTheThreadById(useCaseParam.threadId);
+    await this._threadRepository.verifyThreadAvailability(useCaseParam.threadId);
     await this._commentRepository.verifyExistingComment(useCaseParam);
 
     return this._replyRepository.addReply(newReply);
