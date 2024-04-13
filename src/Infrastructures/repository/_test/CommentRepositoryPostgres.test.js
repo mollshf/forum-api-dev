@@ -39,7 +39,7 @@ describe('CommentRepository Postgres', () => {
 
       /* stub function */
       const fakeIdGenerator = () => 'gntrcmnt';
-      const fakeDateGenerator = () => '2024';
+      const fakeDateGenerator = jest.fn(() => new Date('2024-04-12T00:00:00Z'));
 
       const expectedAddedComment = new AddedComment({
         id: `comment-${fakeIdGenerator()}`,

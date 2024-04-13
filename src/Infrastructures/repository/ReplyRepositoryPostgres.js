@@ -15,13 +15,8 @@ class ReplyRepositoryPostgres extends ReplyRepository {
   async addReply(payload) {
     const { commentId, content, owner } = payload;
 
-    console.log({
-      commentId,
-      content,
-      owner,
-    });
     const id = `reply-${this._idGenerator(16)}`;
-    const date = this._dateGenerator;
+    const date = new this._dateGenerator().toISOString();
     const isDelete = false;
 
     const query = {

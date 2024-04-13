@@ -41,7 +41,7 @@ describe('ReplyRepositoryPostgres', () => {
 
       /* stub function */
       const fakeIdGenerator = () => 'gnrtrrply';
-      const fakeDateGenerator = () => '12042024';
+      const fakeDateGenerator = jest.fn(() => new Date('2024-04-12T00:00:00Z'));
 
       const expectedAddedReply = new AddedReply({
         id: `reply-${fakeIdGenerator()}`,

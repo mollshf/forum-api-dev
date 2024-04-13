@@ -34,7 +34,7 @@ describe('ThreadRepository postgres', () => {
 
       /** stub */
       const fakeIdGenerator = () => 'yoyo';
-      const fakeDateGenerator = () => '2024';
+      const fakeDateGenerator = jest.fn(() => new Date('2024-04-12T00:00:00Z'));
 
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(
         pool,

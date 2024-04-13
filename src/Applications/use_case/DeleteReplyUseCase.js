@@ -10,7 +10,7 @@ class DeleteReplyUseCase {
       ownerId: useCaseCredential.id,
     });
 
-    await this._replyRepository.deleteReply(useCaseParam.replyId);
+    await this._replyRepository.deleteReplyById(useCaseParam.replyId);
   }
 }
 

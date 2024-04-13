@@ -82,7 +82,7 @@ container.register([
           concrete: nanoid,
         },
         {
-          concrete: new Date().toISOString(),
+          concrete: Date,
         },
       ],
     },
@@ -100,7 +100,7 @@ container.register([
           concrete: nanoid,
         },
         {
-          concrete: new Date().toISOString(),
+          concrete: Date,
         },
       ],
     },
@@ -118,7 +118,7 @@ container.register([
           concrete: nanoid,
         },
         {
-          concrete: new Date().toISOString(),
+          concrete: Date,
         },
       ],
     },
