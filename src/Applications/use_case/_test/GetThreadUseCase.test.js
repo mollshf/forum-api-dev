@@ -118,7 +118,11 @@ describe('GetThreadUseCase', () => {
       // Assert
       expect(getThread).toEqual(
         new MainThread({
-          ...mockGetTheThreadById,
+          id: 'thread-subarashi12',
+          title: 'valorant vct',
+          body: 'APAC is on fire',
+          date: `2024`,
+          username: 'userABC',
           comments: expectedComment,
         }),
       );
