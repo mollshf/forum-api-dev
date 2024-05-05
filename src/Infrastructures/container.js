@@ -24,6 +24,7 @@ const CommentRepositoryPostgres = require('./repository/CommentRepositoryPostgre
 const ReplyRepository = require('../Domains/replies/ReplyRepository');
 const ReplyRepositoryPostgres = require('./repository/ReplyRepositoryPostgres');
 const LikeRepository = require('../Domains/likes/LikeRepository');
+const LikeRepositoryPostgress = require('./repository/LikeRepositoryPostgres');
 
 // use case
 const AddUserUseCase = require('../Applications/use_case/AddUserUseCase');
@@ -111,6 +112,24 @@ container.register([
   {
     key: ReplyRepository.name,
     Class: ReplyRepositoryPostgres,
+    parameter: {
+      dependencies: [
+        {
+          concrete: pool,
+        },
+        {
+          concrete: nanoid,
+        },
+        {
+          concrete: Date,
+        },
+      ],
+    },
+  },
+  // Like Repository
+  {
+    key: LikeRepository.name,
+    Class: LikeRepositoryPostgress,
     parameter: {
       dependencies: [
         {

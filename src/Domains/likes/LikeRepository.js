@@ -5,7 +5,7 @@ class LikeRepository {
   async getLikeCountByCommentId(commentId) {
     throw new Error('LIKE_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
-  async deletLikeByCommentIdAndOwner(payload) {
+  async deleteLikeByCommentIdAndOwner(payload) {
     throw new Error('LIKE_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
   async verifyExistingLike(payload) {

@@ -12,7 +12,7 @@ describe('LikeRepository', () => {
     await expect(likeRepository.getLikeCountByCommentId()).rejects.toThrow(
       'LIKE_REPOSITORY.METHOD_NOT_IMPLEMENTED',
     );
-    await expect(likeRepository.deletLikeByCommentIdAndOwner({})).rejects.toThrow(
+    await expect(likeRepository.deleteLikeByCommentIdAndOwner({})).rejects.toThrow(
       'LIKE_REPOSITORY.METHOD_NOT_IMPLEMENTED',
     );
     await expect(likeRepository.verifyExistingLike({})).rejects.toThrow(
