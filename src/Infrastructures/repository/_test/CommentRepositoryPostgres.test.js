@@ -77,6 +77,7 @@ describe('CommentRepository Postgres', () => {
         date: '2023',
         replies: [],
         isDelete: false,
+        likeCount: 0,
       };
       const secondComment = {
         id: 'comment-102',
@@ -84,6 +85,7 @@ describe('CommentRepository Postgres', () => {
         date: '2024',
         replies: [],
         isDelete: false,
+        likeCount: 0,
       };
 
       /* Create some comments */

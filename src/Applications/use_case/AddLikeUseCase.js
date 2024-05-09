@@ -15,12 +15,10 @@ class AddLikeUseCase {
     await this._commentRepository.verifyExistingComment(useCaseParam);
 
     if (await this._likeRepository.verifyExistingLike(newLike)) {
-      await this._likeRepository.deletLikeByCommentIdAndOwner(newLike);
-      return 0;
+      await this._likeRepository.deleteLikeByCommentIdAndOwner(newLike);
+    } else {
+      await this._likeRepository.addLike(newLike);
     }
-
-    await this._likeRepository.addLike(newLike);
-    return 0;
   }
 }
 

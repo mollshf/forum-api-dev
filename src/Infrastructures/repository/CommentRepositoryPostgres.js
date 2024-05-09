@@ -44,6 +44,7 @@ class CommentRepositoryPostgres extends CommentRepository {
         ...data,
         isDelete: data.is_delete,
         replies: [],
+        likeCount: 0,
       });
     });
   }

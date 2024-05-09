@@ -25,6 +25,7 @@ describe('MainComment entities', () => {
       content: 'kerennn!!',
       replies: 123,
       isDelete: 'false',
+      likeCount: '1',
     };
 
     // Action & Assert
@@ -42,10 +43,13 @@ describe('MainComment entities', () => {
       content: 'kerennn!!',
       replies: [],
       isDelete: false,
+      likeCount: 1,
     };
 
     // Action
-    const { id, username, date, content, replies, isDelete } = new MainComment(mainCommentPayload);
+    const { id, username, date, content, replies, isDelete, likeCount } = new MainComment(
+      mainCommentPayload,
+    );
 
     // Assert
     expect(id).toEqual(mainCommentPayload.id);
@@ -54,5 +58,6 @@ describe('MainComment entities', () => {
     expect(content).toEqual(mainCommentPayload.content);
     expect(replies).toEqual(mainCommentPayload.replies);
     expect(isDelete).toEqual(mainCommentPayload.isDelete);
+    expect(likeCount).toEqual(mainCommentPayload.likeCount);
   });
 });

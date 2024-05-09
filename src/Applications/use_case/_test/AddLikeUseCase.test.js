@@ -68,7 +68,7 @@ describe('AddLikeUseCase', () => {
     /* mocking needed function */
     mockCommentRepository.verifyExistingComment = jest.fn(() => Promise.resolve());
     mockLikeRepository.verifyExistingLike = jest.fn(async () => true);
-    mockLikeRepository.deletLikeByCommentIdAndOwner = jest.fn(() => Promise.resolve());
+    mockLikeRepository.deleteLikeByCommentIdAndOwner = jest.fn(() => Promise.resolve());
 
     /* creating use case instance */
     const addLikeUseCase = new AddLikeUseCase({
@@ -87,7 +87,7 @@ describe('AddLikeUseCase', () => {
         owner: useCaseCredential.id,
       }),
     );
-    expect(mockLikeRepository.deletLikeByCommentIdAndOwner).toBeCalledWith(
+    expect(mockLikeRepository.deleteLikeByCommentIdAndOwner).toBeCalledWith(
       new NewLike({
         commentId: useCaseParam.commentId,
         owner: useCaseCredential.id,

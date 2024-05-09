@@ -2,7 +2,6 @@ const CommentTableTestHelper = require('../../../../tests/CommentTableTestHelper
 const LikeTableTestHelper = require('../../../../tests/LikeTableTestHelper');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadRepositoryTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
-const ClientError = require('../../../Commons/exceptions/ClientError');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const NewLike = require('../../../Domains/likes/entities/NewLike');
 const pool = require('../../database/postgres/pool');
