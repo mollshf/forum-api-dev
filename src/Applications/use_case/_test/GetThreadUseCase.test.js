@@ -1,5 +1,6 @@
 const CommentRepository = require('../../../Domains/comments/CommentRepository');
 const MainComment = require('../../../Domains/comments/entities/MainComment');
+const LikeRepository = require('../../../Domains/likes/LikeRepository');
 const ReplyRepository = require('../../../Domains/replies/ReplyRepository');
 const MainReply = require('../../../Domains/replies/entities/MainReply');
 const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
@@ -28,6 +29,7 @@ describe('GetThreadUseCase', () => {
           content: 'hontou!!!',
           replies: [],
           isDelete: false,
+          likeCount: 0,
         }),
         new MainComment({
           id: 'comment-124',
@@ -36,6 +38,7 @@ describe('GetThreadUseCase', () => {
           content: 'sugoii!!',
           replies: [],
           isDelete: true,
+          likeCount: 0,
         }),
       ];
 
@@ -83,6 +86,7 @@ describe('GetThreadUseCase', () => {
         threadRepository: mockThreadRepository,
         commentRepository: mockCommentRepository,
         replyRepository: mockReplyRepository,
+        likeRepository: {},
       });
 
       /* filtering isDelete at comment */
@@ -107,10 +111,19 @@ describe('GetThreadUseCase', () => {
         { ...mockCommentB, replies: [filterReplyDetailB] },
       ];
 
+      const mockExpectedComment = [
+        { ...mockCommentA, replies: [filterReplyDetailA] },
+        { ...mockCommentB, replies: [filterReplyDetailB] },
+      ];
+
       /* mocking needed function */
       getThreadUseCase._changeContentOfComments = jest
         .fn()
         .mockImplementation(() => [mockCommentA, mockCommentB]);
+
+      getThreadUseCase._getLikeCountOfComment = jest
+        .fn()
+        .mockImplementation(() => Promise.resolve(mockExpectedComment));
 
       // Action
       const getThread = await getThreadUseCase.execute(threadId);
@@ -130,6 +143,7 @@ describe('GetThreadUseCase', () => {
       expect(mockCommentRepository.getCommentByThreadId).toBeCalledWith(threadId);
       expect(getThreadUseCase._changeContentOfComments).toBeCalledWith(mockComment);
       expect(getThreadUseCase._changeContentOfComments).toHaveBeenCalled();
+      expect(getThreadUseCase._getLikeCountOfComment).toHaveBeenCalled();
     });
   });
 
@@ -182,6 +196,7 @@ describe('GetThreadUseCase', () => {
           date: '2024',
           replies: [],
           isDelete: false,
+          likeCount: 0,
         }),
       ];
 
@@ -205,6 +220,7 @@ describe('GetThreadUseCase', () => {
           date: '01042024',
           content: '**komentar telah dihapus**',
           replies: [],
+          likeCount: 0,
         },
         {
           id: 'comment-124',
@@ -212,6 +228,7 @@ describe('GetThreadUseCase', () => {
           date: '08042024',
           content: 'sugoii!!',
           replies: [],
+          likeCount: 0,
         },
       ];
 
@@ -267,6 +284,67 @@ describe('GetThreadUseCase', () => {
 
       // assert
       expect(SpychangeContentOfRepliesComment).toReturnWith(expectedResult);
+    });
+  });
+
+  describe('GetThreadUseCase _getLikeCountOfComment function', () => {
+    it('should operate the function properly', async () => {
+      // Arrange
+      const commentsParam = [
+        {
+          id: 'comment-123',
+          username: 'user-A',
+          date: '01042024',
+          content: '**komentar telah dihapus**',
+          replies: [],
+          likeCount: 0,
+        },
+        {
+          id: 'comment-124',
+          username: 'user-B',
+          date: '08042024',
+          content: 'sugoii!!',
+          replies: [],
+          likeCount: 0,
+        },
+      ];
+
+      const expectedComments = [
+        {
+          ...commentsParam[0],
+          likeCount: 0,
+        },
+        {
+          ...commentsParam[1],
+          likeCount: 90,
+        },
+      ];
+
+      /* creating dependency of getThreadById */
+      const mockLikeRepository = new LikeRepository();
+
+      /* mocking needed function */
+      mockLikeRepository.getLikeCountByCommentId = jest
+        .fn()
+        .mockImplementation((commentId) => Promise.resolve(commentId === 'comment-124' ? 90 : 0));
+
+      /* creating getThreadById Instance */
+      const getThreadDetailUseCase = new GetThreadUseCase({
+        threadRepository: {},
+        commentRepository: {},
+        likeRepository: mockLikeRepository,
+      });
+
+      const SpyGetLikeCountOfComment = jest.spyOn(getThreadDetailUseCase, '_getLikeCountOfComment');
+
+      // action
+      const result = await getThreadDetailUseCase._getLikeCountOfComment(commentsParam);
+
+      // assert
+      expect(result).toEqual(expectedComments);
+      expect(mockLikeRepository.getLikeCountByCommentId).toBeCalledTimes(2);
+
+      SpyGetLikeCountOfComment.mockClear();
     });
   });
 });

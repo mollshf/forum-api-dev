@@ -205,7 +205,7 @@ describe('ReplyRepositoryPostgres', () => {
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {}, {});
 
       // Action & Assert
-      await expect(replyRepositoryPostgres.deleteReplyById('reply-123')).rejects.toThrowError(
+      await expect(replyRepositoryPostgres.deleteReplyById('reply-123')).rejects.toThrow(
         new NotFoundError('Gagal menghapus, reply tidak ditemukan.'),
       );
     });

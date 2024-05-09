@@ -1,10 +1,11 @@
 const MainThread = require('../../Domains/threads/entities/MainThread');
 
 class GetThreadUseCase {
-  constructor({ threadRepository, commentRepository, replyRepository }) {
+  constructor({ threadRepository, commentRepository, replyRepository, likeRepository }) {
     this._threadRepository = threadRepository;
     this._commentRepository = commentRepository;
     this._replyRepository = replyRepository;
+    this._likeRepository = likeRepository;
   }
 
   async execute(threadId) {
@@ -14,6 +15,7 @@ class GetThreadUseCase {
 
     thread.comments = this._changeContentOfComments(comment);
     thread.comments = this._changeContentOfRepliesComment(thread.comments, reply);
+    thread.comments = await this._getLikeCountOfComment(thread.comments);
 
     return new MainThread(thread);
   }
@@ -42,6 +44,16 @@ class GetThreadUseCase {
       result.push(comment);
     });
     return result;
+  }
+
+  async _getLikeCountOfComment(comments) {
+    for (let i = 0; i < comments.length; i++) {
+      const commentId = comments[i].id;
+
+      comments[i].likeCount = await this._likeRepository.getLikeCountByCommentId(commentId);
+    }
+
+    return comments;
   }
 }
 
