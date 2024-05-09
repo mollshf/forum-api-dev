@@ -89,7 +89,7 @@ describe('likes endpoint', () => {
 
       // Assert
       const responseJson = JSON.parse(response.payload);
-      expect(expectedLike).toBeDefined();
+      expect(expectedLike).toBeUndefined();
       expect(response.statusCode).toEqual(200);
       expect(responseJson.status).toEqual('success');
     });
